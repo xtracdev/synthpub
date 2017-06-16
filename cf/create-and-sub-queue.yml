@@ -1,0 +1,53 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  Create a topic to use when publishing event store events
+
+
+Parameters:
+  TopicARN:
+    Type: String
+
+  QueueName:
+    Type: String
+
+Resources:
+
+  MyDeadLetterQueue:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      QueueName: !Join [ "", [!Ref QueueName, "DLQ"]]
+
+  MyQueue:
+    Type: "AWS::SQS::Queue"
+    Properties:
+      QueueName: !Ref QueueName
+      RedrivePolicy:
+        deadLetterTargetArn:
+          Fn::GetAtt:
+            - "MyDeadLetterQueue"
+            - "Arn"
+        maxReceiveCount: 5
+
+  MySubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: !GetAtt [MyQueue, "Arn"]
+        Protocol: sqs
+        TopicArn: !Ref TopicARN
+
+  MyQueuePolicy:
+    Type: "AWS::SQS::QueuePolicy"
+    Properties:
+      PolicyDocument:
+        Version: 2012-10-17
+        Id: !Join [ "/", [ !GetAtt [MyQueue, "Arn"], SQSDefaultPolicy ]]
+        Statement:
+          - Sid: "Sid123"
+            Effect: Allow
+            Principal: "*"
+            Action: "SQS:SendMessage"
+            Resource: !GetAtt [MyQueue, "Arn"]
+            Condition:
+              ArnEquals:
+                "aws:SourceArn" : !Ref TopicARN
+      Queues: [ !Ref MyQueue ]

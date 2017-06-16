@@ -1,0 +1,18 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: >
+  Create a topic to use when publishing event store events
+
+
+Parameters:
+  TopicName:
+    Type: String
+
+Resources:
+  PGPublishTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Ref TopicName
+
+Outputs:
+  TopicArn:
+    Value: !Ref PGPublishTopic

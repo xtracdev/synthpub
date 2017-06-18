@@ -3,7 +3,7 @@ containerbin:
 	docker build -t xtracdev/synthproducer:latest .
 
 push:
-	docker push xtracdev/synthproducer:latest .
+	docker push xtracdev/synthproducer:latest
 
 clean:
 	rm -f synthproducer

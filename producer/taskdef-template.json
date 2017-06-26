@@ -1,0 +1,42 @@
+{
+  "family": "prodsynthevent",
+  "containerDefinitions": [
+    {
+      "name": "prodsynthevent",
+      "image": "xtracdev/synthproducer",
+      "cpu": 128,
+      "memory": 128,
+      "essential": true,
+      "environment": [
+        {
+          "name": "DB_USER",
+          "value": "xxx"
+        },
+        {
+          "name": "DB_PASSWORD",
+          "value": "xxx"
+        },
+        {
+          "name": "DB_HOST",
+          "value": "xxx"
+        },
+        {
+          "name": "DB_PORT",
+          "value": "xxx"
+        },
+        {
+          "name": "DB_NAME",
+          "value": "xxx"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "SynthEvents",
+          "awslogs-region":"us-east-1",
+          "awslogs-stream-prefix": "prod"
+        }
+      }
+    }
+  ]
+}

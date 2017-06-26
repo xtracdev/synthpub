@@ -1,0 +1,27 @@
+{
+  "family": "consynthevent",
+  "taskRoleArn":"",
+  "containerDefinitions": [
+    {
+      "name": "consynthevent",
+      "image": "xtracdev/synthconsumer",
+      "cpu": 128,
+      "memory": 128,
+      "essential": true,
+      "environment": [
+        {
+          "name": "EVENT_QUEUE_URL",
+          "value": "xxx"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "SynthEvents",
+          "awslogs-region":"us-east-1",
+          "awslogs-stream-prefix": "cons"
+        }
+      }
+    }
+  ]
+}
